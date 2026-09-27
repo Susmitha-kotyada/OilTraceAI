@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oil Trace AI | Maritime Satellite Spill Detection & AIS Correlation</title>
+  
+  <!-- Leaflet CSS for Maritime Cartography -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Core Application Stylesheet -->
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- ====================================================================
+       LANDING PAGE VIEW (Dedicated Top Bar, No Sidebar, Rich Prototype Details)
+       ==================================================================== -->
+  <div id="landing-page-view">
+    
+    <!-- Landing Top Bar -->
+    <header class="landing-top-bar">
+      <div class="landing-top-bar-left">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+            <line x1="12" y1="12" x2="20" y2="12"></line>
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2a15 15 0 0 1 9 5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Oil Trace <span>AI</span></h1>
+          <div class="brand-subtitle">Autonomous Maritime Intelligence</div>
+        </div>
+      </div>
+
+      <div class="landing-top-bar-right">
+        <!-- Live System Status Badge -->
+        <div class="header-status-badge">
+          <span class="status-dot pulse" style="display:inline-block; margin-right:4px;"></span>
+          SAR Link: Active • AIS Live 12s Feed
+        </div>
+
+        <!-- UTC Clock -->
+        <div class="utc-clock-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span id="landing-utc-clock">2026-09-27 14:32:00 UTC</span>
+        </div>
+
+        <!-- Light / Dark Mode Toggle Button -->
+        <button class="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">
+          <!-- Sun Icon (shown in dark mode) -->
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon Icon (shown in light mode) -->
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <!-- Launch Platform CTA Button -->
+        <button class="btn-launch-nav btn-launch-platform">
+          <span>Launch Platform</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Landing Hero Section -->
+    <section class="landing-hero">
+      <div class="landing-badge">
+        <span class="status-dot"></span>
+        EEZ Maritime Surveillance Prototype • Version 2.4 Active
+      </div>
+
+      <h1 class="landing-title">
+        Spaceborne Satellite Spill Detection & <span>AIS Vessel Correlation</span>
+      </h1>
+
+      <p class="landing-desc">
+        An end-to-end maritime intelligence platform for coastal authorities and coast guards. Ingests Synthetic Aperture Radar (SAR) and multispectral optical satellite imagery to detect potential hydrocarbon slicks, automatically synchronizes spatial-temporal AIS trajectories, and ranks candidate vessels across 5 forensic parameters.
+      </p>
+
+      <div class="landing-cta-group">
+        <button class="btn-launch-hero btn-launch-platform">
+          <span>Launch Surveillance Platform</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+        <a href="#landing-pipeline-section" class="btn-secondary-hero">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+          Explore Prototype Pipeline
+        </a>
+      </div>
+
+      <!-- Key Metrics Ribbon -->
+      <div class="landing-metrics-ribbon">
+        <div class="landing-metric-card">
+          <div class="landing-metric-num cyan">124,500 <span style="font-size:1rem; font-weight:500;">km²</span></div>
+          <div class="landing-metric-lbl">EEZ Ocean Monitored</div>
+        </div>
+        <div class="landing-metric-card">
+          <div class="landing-metric-num crimson">94.6%</div>
+          <div class="landing-metric-lbl">SAR Detection Confidence</div>
+        </div>
+        <div class="landing-metric-card">
+          <div class="landing-metric-num amber">5-Factor</div>
+          <div class="landing-metric-lbl">Kinematic AIS Correlation</div>
+        </div>
+        <div class="landing-metric-card">
+          <div class="landing-metric-num emerald">&lt; 1.2s</div>
+          <div class="landing-metric-lbl">Live Segmentation Latency</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4-Step Operational Pipeline Section -->
+    <section id="landing-pipeline-section" class="landing-section">
+      <div class="section-eyebrow">Prototype Architecture & Workflow</div>
+      <h2 class="section-heading">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Focused Operational Pipeline
+      </h2>
+
+      <div class="pipeline-grid">
+        <!-- Step 1 -->
+        <div class="pipeline-card">
+          <span class="pipeline-step-badge">STEP 01</span>
+          <h3>Satellite Image Ingestion</h3>
+          <p>User uploads satellite imagery or selects high-resolution Sentinel-1 SAR C-Band, Sentinel-2 Optical MSI, or TerraSAR-X scans. Automated radiometric calibration.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="pipeline-card">
+          <span class="pipeline-step-badge">STEP 02</span>
+          <h3>Spill Detection & Masking</h3>
+          <p>Computer vision engine segments dark formation anomalies using capillary wave dampening physics. Calculates area (km²), centroid, confidence, and uncertainty index.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="pipeline-card">
+          <span class="pipeline-step-badge">STEP 03</span>
+          <h3>AIS Spatial-Temporal Sync</h3>
+          <p>Extracts historical AIS Class-A/B vessel broadcasts within the temporal release window. Analyzes distance to centroid, CPA, route similarity, and speed anomalies.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="pipeline-card">
+          <span class="pipeline-step-badge">STEP 04</span>
+          <h3>Candidate Vessel Ranking</h3>
+          <p>Ranks candidate vessels using the 5 required parameters with correlation scores and generates full forensic evidence dossiers for regulatory prioritization.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Prototype Spotlight Card -->
+    <section class="landing-section">
+      <div class="prototype-spotlight-card">
+        <div class="spotlight-info">
+          <span class="spotlight-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Active Incident Surveillance: PS-2026-0927-A
+          </span>
+
+          <h3>Strait of Dover TSS • Potential Oil Spill Plume</h3>
+          <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+            Sentinel-1C Synthetic Aperture Radar captured a 14.28 km² backscatter damping plume in the northbound shipping lane. Algorithmic correlation identified crude tanker <strong>MT BOREALIS STAR</strong> with a 93.8% correlation score based on anomalous speed reduction directly inside the slick formation coordinates.
+          </p>
+
+          <div class="spotlight-specs-list">
+            <div><span style="color:var(--text-muted);">Slick Area:</span> 14.28 km² (1,428 ha)</div>
+            <div><span style="color:var(--text-muted);">Confidence:</span> 94.6% (SAR C-Band)</div>
+            <div><span style="color:var(--text-muted);">Top Candidate:</span> MT BOREALIS STAR</div>
+            <div><span style="color:var(--text-muted);">CPA Offset:</span> 0.22 nm at 11:24 UTC</div>
+          </div>
+
+          <div>
+            <button class="btn-primary-action btn-launch-platform" style="padding: 10px 22px;">
+              <span>Enter Live Platform & Inspect Incident</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="spotlight-preview-box">
+          <div class="spotlight-visual-bar">
+            <span style="font-size:0.7rem; font-family:var(--font-mono); color:var(--text-muted);">RADAR ATTENUATION MAP</span>
+            <span style="font-size:0.7rem; font-family:var(--font-mono); color:var(--spill-critical);">93.8% CORRELATION</span>
+          </div>
+          
+          <div style="aspect-ratio: 16/10; background: #030816; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid var(--border-subtle); display:flex; align-items:center; justify-content:center;">
+            <!-- Stylized radar visualization preview -->
+            <svg width="100%" height="100%" viewBox="0 0 400 240" fill="none">
+              <!-- Grid -->
+              <line x1="0" y1="60" x2="400" y2="60" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="0" y1="120" x2="400" y2="120" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="0" y1="180" x2="400" y2="180" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="100" y1="0" x2="100" y2="240" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="200" y1="0" x2="200" y2="240" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="300" y1="0" x2="300" y2="240" stroke="#0f223f" stroke-width="1" stroke-dasharray="3,3"/>
+              <!-- Slick plume -->
+              <path d="M 80 150 Q 140 130 200 110 T 320 80 Q 310 95 280 115 T 160 160 Z" fill="rgba(244,63,94,0.4)" stroke="#f43f5e" stroke-width="2"/>
+              <!-- Vessel trajectory -->
+              <path d="M 60 165 L 140 135 L 210 108 L 290 85 L 340 70" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4"/>
+              <!-- Ship Arrow -->
+              <polygon points="340,65 352,73 340,77 344,71" fill="#f59e0b" stroke="#ffffff" stroke-width="1"/>
+              <!-- Text -->
+              <text x="90" y="180" fill="#f43f5e" font-family="Inter" font-weight="700" font-size="10">POTENTIAL OIL SPILL [14.28 km²]</text>
+              <text x="260" y="60" fill="#f59e0b" font-family="Inter" font-weight="600" font-size="10">MT BOREALIS STAR (93.8%)</text>
+            </svg>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; font-size:0.72rem; font-family:var(--font-mono); color:var(--text-secondary);">
+            <span>Sensor: C-Band SAR VV</span>
+            <span>Speed: 8.2 kts (-5.9 dip)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Rigor Grid -->
+    <section class="landing-section">
+      <div class="section-eyebrow">Scientific & Operational Rigor</div>
+      <h2 class="section-heading">Platform Intelligence Features</h2>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+            </svg>
+          </div>
+          <h4>Capillary Bragg Wave Physics</h4>
+          <p>Oil films dampen centimeter-scale ocean surface capillary waves, generating measurable radar specular reflection and sharp contrast (-3 to -10 dB) in SAR imagery.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <h4>5-Factor AIS Kinematics</h4>
+          <p>Candidate vessel ranking synthesizes Distance, Time proximity, Route trajectory similarity, Speed anomalies (slowing down), and Heading alignment with the slick drift axis.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <h4>Forensic Evidence Dossiers</h4>
+          <p>Strictly maintains "Potential Oil Spill" and "Candidate Vessel" nomenclature to ensure legal integrity, generating audit-ready forensic summaries for maritime authorities.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Landing Footer -->
+    <footer class="landing-footer">
+      <div>
+        <strong>Oil Trace AI</strong> • Prototype v2.4 • Developed for Spaceborne SAR Surveillance & AIS Marine Safety.
+      </div>
+      <div>
+        <button class="btn-launch-nav btn-launch-platform" style="padding:6px 14px; font-size:0.78rem;">
+          Launch Platform →
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <!-- ====================================================================
+       MAIN APPLICATION SHELL (Sidebar with Dashboard, Analysis, Ranking, Alerts)
+       ==================================================================== -->
+  <div id="app-container" style="display: none;">
+    
+    <!-- Sidebar Navigation (Only 4 Items as strictly requested) -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="2" x2="12" y2="12"></line>
+              <line x1="12" y1="12" x2="20" y2="12"></line>
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2a15 15 0 0 1 9 5"></path>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Oil Trace <span>AI</span></h1>
+            <div class="brand-subtitle">SAR + AIS Maritime Intel</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <!-- 1. Dashboard -->
+          <button class="nav-item active" data-view="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+              <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+              <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+
+          <!-- 2. Satellite Analysis -->
+          <button class="nav-item" data-view="satellite-analysis">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 11a9 9 0 0 1 9 9"></path>
+              <path d="M4 4a16 16 0 0 1 16 16"></path>
+              <circle cx="5" cy="19" r="1"></circle>
+              <path d="M18 4l2 2-6 6-2-2 6-6z"></path>
+            </svg>
+            <span>Satellite Analysis</span>
+            <span class="nav-badge count-pill">SAR</span>
+          </button>
+
+          <!-- 3. Vessel Ranking -->
+          <button class="nav-item" data-view="vessel-ranking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2L19 19L12 16L5 19L12 2Z"></path>
+            </svg>
+            <span>Vessel Ranking</span>
+            <span class="nav-badge count-pill">AIS</span>
+          </button>
+
+          <!-- 4. Alerts -->
+          <button class="nav-item" data-view="alerts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span>Alerts</span>
+            <span id="sidebar-alert-badge" class="nav-badge alert-count">2</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar Status Telemetry -->
+      <div class="sidebar-footer">
+        <div class="system-telemetry">
+          <div class="telemetry-row">
+            <span class="telemetry-label">
+              <span class="status-dot pulse"></span>
+              Sentinel-1 SAR
+            </span>
+            <span class="telemetry-val">ONLINE</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">
+              <span class="status-dot"></span>
+              Coastal AIS Feed
+            </span>
+            <span class="telemetry-val">12s SYNC</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">
+              <span class="status-dot"></span>
+              Detection Pipeline
+            </span>
+            <span class="telemetry-val">ACTIVE</span>
+          </div>
+        </div>
+
+        <button class="btn-return-landing" style="width:100%; margin-top:10px; background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); font-size:0.72rem; padding:6px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Return to Overview
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Platform Wrapper -->
+    <main class="main-wrapper">
+      
+      <!-- Top Operational Header -->
+      <header class="top-header">
+        <div class="view-breadcrumbs">
+          <span class="breadcrumb-root">Oil Trace AI</span>
+          <span class="breadcrumb-separator">/</span>
+          <span id="top-breadcrumb-current" class="breadcrumb-current">Operational Maritime Dashboard</span>
+          <span class="header-status-badge">EEZ Surveillance Sector 4</span>
+        </div>
+
+        <div class="header-actions">
+          <!-- Return to Landing Page button -->
+          <button class="btn-secondary btn-return-landing" style="padding: 5px 10px; font-size: 0.74rem;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Overview
+          </button>
+
+          <!-- Theme Toggle Button -->
+          <button class="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">
+            <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- UTC Clock -->
+          <div class="utc-clock-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="live-utc-clock">2026-09-27 14:32:00 UTC</span>
+          </div>
+
+          <!-- Sector Selector -->
+          <div class="zone-selector">
+            <label for="marine-zone-select" style="font-size: 0.72rem; color: var(--text-muted);">Sector:</label>
+            <select id="marine-zone-select">
+              <option value="dover">English Channel & Dover TSS</option>
+              <option value="dogger">Southern North Sea (Dogger Bank)</option>
+              <option value="solent">Solent & Eastern Approaches</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content -->
+      <div class="view-content">
+
+        <!-- ================================================================
+             VIEW 1: DASHBOARD
+             ================================================================ -->
+        <section id="view-dashboard" class="app-view active">
+          
+          <!-- Live Image Sync Toast / Notification Banner -->
+          <div id="dashboard-sync-banner" class="dashboard-sync-banner" style="display: none;">
+            <div class="sync-banner-text">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span id="dashboard-sync-banner-text">Live Satellite Analysis Synced to Dashboard.</span>
+            </div>
+            <button onclick="document.getElementById('dashboard-sync-banner').style.display='none';" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer;">✕</button>
+          </div>
+
+          <!-- Key Statistics Bar -->
+          <div class="stats-grid">
+            <div class="stat-card alert-accent">
+              <div class="stat-header">
+                <span class="stat-label">Potential Oil Spills</span>
+                <div class="stat-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value"><span id="stat-spills-count">3</span> <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">Zones</span></div>
+              <div class="stat-footer">
+                <span class="stat-trend trend-up">+1 detected</span>
+                <span>in latest satellite acquisition</span>
+              </div>
+            </div>
+
+            <div class="stat-card vessel-accent">
+              <div class="stat-header">
+                <span class="stat-label">Candidate Vessels</span>
+                <div class="stat-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L19 19L12 16L5 19L12 2Z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">5 <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">Correlated</span></div>
+              <div class="stat-footer">
+                <span class="stat-trend trend-up">1 High Match</span>
+                <span>(>90% correlation score)</span>
+              </div>
+            </div>
+
+            <div class="stat-card sar-accent">
+              <div class="stat-header">
+                <span class="stat-label">Affected Marine Area</span>
+                <div class="stat-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value" id="stat-total-affected-area">26.85 <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">km²</span></div>
+              <div class="stat-footer">
+                <span class="stat-trend trend-neutral">2,685 ha</span>
+                <span>surface slick dispersion</span>
+              </div>
+            </div>
+
+            <div class="stat-card ais-accent">
+              <div class="stat-header">
+                <span class="stat-label">Monitored Vessels in EEZ</span>
+                <div class="stat-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 14 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-value">148 <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">Ships</span></div>
+              <div class="stat-footer">
+                <span class="stat-trend trend-positive">100% AIS feed</span>
+                <span>Class-A & Class-B broadcast</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               DASHBOARD ACTIVE SATELLITE SPILL & VESSEL CV DETECTION CARD
+               ============================================================ -->
+          <div class="dashboard-active-satellite-card">
+            <div class="card-header-bar">
+              <div class="card-title-group">
+                <span class="card-title">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a15 15 0 0 1 9 5"></path>
+                    <line x1="12" y1="2" x2="12" y2="12"></line>
+                  </svg>
+                  Active Satellite Acquisition & Computer Vision Detection
+                </span>
+                <span id="dash-active-scene-badge" class="header-status-badge">Sentinel-1C SAR (VV-Pol)</span>
+              </div>
+
+              <!-- View Controls: Analyzed Detection vs Raw Image -->
+              <div class="dash-view-controls">
+                <button id="dash-btn-show-analyzed" class="dash-img-toggle-btn active" title="Show Computer Vision Spill & Vessel Target Detections">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                  Analyzed Detection (Spill + Ships)
+                </button>
+                <button id="dash-btn-show-raw" class="dash-img-toggle-btn" title="Show Raw Satellite Acquisition Image">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  </svg>
+                  Raw Satellite Image
+                </button>
+                <button onclick="window.OilTraceApp.navigateTo('satellite-analysis');" class="btn-secondary" style="padding: 5px 12px; font-size: 0.74rem; display: inline-flex; align-items: center; gap: 5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  Upload / Analyze
+                </button>
+              </div>
+            </div>
+
+            <div class="dash-satellite-showcase-grid">
+              
+              <!-- Large Satellite Image Display with Tactical Overlays -->
+              <div class="dash-img-viewport-card">
+                <div class="dash-img-wrapper">
+                  <img id="dashboard-main-satellite-img" class="dashboard-satellite-img" src="" alt="Active Satellite Image">
+                  
+                  <!-- Floating Tactical HUD Overlays on the image -->
+                  <div class="dash-img-hud-top">
+                    <span id="dash-hud-spill-badge" class="hud-pill critical">
+                      <span class="status-dot" style="background:#f43f5e; box-shadow:0 0 6px #f43f5e;"></span>
+                      POTENTIAL OIL SPILL [14.28 km² | 94.6% Conf]
+                    </span>
+                    <span id="dash-hud-vessels-badge" class="hud-pill cyan">
+                      <span class="status-dot" style="background:#06b6d4; box-shadow:0 0 6px #06b6d4;"></span>
+                      2 VESSEL TARGETS IDENTIFIED
+                    </span>
+                  </div>
+                  
+                  <div class="dash-img-hud-bottom">
+                    <span id="dash-hud-sensor-tag" class="hud-sub">Sentinel-1C C-Band SAR (10m Resolution)</span>
+                    <span id="dash-hud-coords-tag" class="hud-sub">51° 13' 06" N, 001° 37' 26" E</span>
+                  </div>
+                </div>
+
+                <!-- Quick Metrics Ribbon below the image -->
+                <div class="dash-img-metrics-ribbon">
+                  <div class="dash-metric-item">
+                    <span class="lbl">Detected Slick Area</span>
+                    <span id="dash-metric-area" class="val critical">14.28 km²</span>
+                  </div>
+                  <div class="dash-metric-item">
+                    <span class="lbl">CV Confidence</span>
+                    <span id="dash-metric-confidence" class="val cyan">94.6%</span>
+                  </div>
+                  <div class="dash-metric-item">
+                    <span class="lbl">Uncertainty Margin</span>
+                    <span id="dash-metric-uncertainty" class="val">± 6.0%</span>
+                  </div>
+                  <div class="dash-metric-item">
+                    <span class="lbl">Identified Vessel Targets</span>
+                    <span id="dash-metric-targets" class="val amber">2 Ship Targets</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Correlated Candidate Vessel Spotlight -->
+              <div class="dash-candidate-spotlight-card">
+                <div class="spotlight-header">
+                  <div class="spotlight-title-row">
+                    <span class="spotlight-label">TOP CORRELATED CANDIDATE VESSEL</span>
+                    <span id="dash-top-candidate-risk" class="risk-badge critical">HIGH PRIORITY CANDIDATE</span>
+                  </div>
+                  <h3 id="dash-top-candidate-name" class="spotlight-vessel-name">MT BOREALIS STAR</h3>
+                  <div id="dash-top-candidate-sub" class="spotlight-vessel-sub">Crude Oil Tanker • Flag: Liberia (LR) • MMSI: 244710923</div>
+                </div>
+
+                <!-- Score Bar -->
+                <div class="spotlight-score-section">
+                  <div class="score-row">
+                    <span style="font-size:0.75rem; color:var(--text-secondary);">Kinematic Correlation Match:</span>
+                    <span id="dash-top-candidate-score" class="score-number critical">93.8%</span>
+                  </div>
+                  <div class="score-bar-track">
+                    <div id="dash-top-candidate-bar" class="score-bar-fill meter-high" style="width: 93.8%;"></div>
+                  </div>
+                </div>
+
+                <!-- Kinematic Parameters -->
+                <div class="spotlight-kinematics-grid">
+                  <div class="kinematic-item">
+                    <span class="k-label">Distance to Spill</span>
+                    <span id="dash-top-candidate-dist" class="k-val">0.78 nm (1.45 km)</span>
+                  </div>
+                  <div class="kinematic-item">
+                    <span class="k-label">Time Proximity (CPA)</span>
+                    <span id="dash-top-candidate-time" class="k-val">-38 min</span>
+                  </div>
+                  <div class="kinematic-item">
+                    <span class="k-label">Trajectory Colinearity</span>
+                    <span id="dash-top-candidate-route" class="k-val">95.4% Match</span>
+                  </div>
+                  <div class="kinematic-item">
+                    <span class="k-label">Speed at Plume Origin</span>
+                    <span id="dash-top-candidate-speed" class="k-val">8.2 kts (-5.9 dip)</span>
+                  </div>
+                </div>
+
+                <div class="spotlight-note-box">
+                  <div class="note-title">COMPUTER VISION & AIS CORRELATION NOTE:</div>
+                  <p id="dash-top-candidate-note" class="note-text">
+                    SAR radar point target V-01 identified directly at slick plume origin. Longitudinal dispersion vector aligns within 1.8° of vessel wake trajectory (059°).
+                  </p>
+                </div>
+
+                <div class="spotlight-actions-row">
+                  <button id="dash-btn-open-dossier" class="btn-primary-action" style="flex: 1; padding: 10px 14px; font-size: 0.78rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    Inspect Evidence Dossier
+                  </button>
+                  <button onclick="window.OilTraceApp.navigateTo('vessel-ranking');" class="btn-secondary" style="padding: 10px 14px; font-size: 0.78rem;">
+                    All Ranked Vessels →
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Interactive Marine Map & Recent Analysis Grid -->
+          <div class="dashboard-grid">
+            
+            <!-- Map Container Card -->
+            <div class="map-container-card">
+              <div class="card-header-bar">
+                <div class="card-title-group">
+                  <span class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                      <line x1="8" y1="2" x2="8" y2="18"></line>
+                      <line x1="16" y1="6" x2="16" y2="22"></line>
+                    </svg>
+                    Live Maritime Map & Spill Tracking
+                  </span>
+                </div>
+
+                <div class="card-actions">
+                  <button id="btn-toggle-tracks" class="map-control-btn active" title="Toggle Vessel Historical AIS Tracks">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    AIS Trajectories
+                  </button>
+                  <button id="btn-center-spill" class="map-control-btn" title="Focus view on primary detected spill">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="16"></line>
+                      <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                    Center Primary Spill
+                  </button>
+                </div>
+              </div>
+
+              <!-- Leaflet Map Container -->
+              <div id="marine-map"></div>
+
+              <!-- Map Legend Overlay -->
+              <div class="map-legend-overlay">
+                <div class="legend-title">Maritime Layer Legend</div>
+                <div class="legend-item">
+                  <span class="legend-icon-slick"></span>
+                  <span>Potential Oil Spill Area (SAR Attenuation)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-icon-candidate"></span>
+                  <span>Candidate Vessel (Correlated AIS Track)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-icon-trajectory"></span>
+                  <span>Historical AIS Trajectory (Past 12h)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-icon-vessel"></span>
+                  <span>Ambient Traffic (Commercial Vessels)</span>
+                </div>
+              </div>
+
+              <!-- Map Coordinates Overlay -->
+              <div id="map-live-coords" class="map-coords-overlay">
+                51.2185° N, 1.6240° E | Sea State 3 | Depth: 34m
+              </div>
+            </div>
+
+            <!-- Recent Analysis Feed Panel with Synchronized Image Thumbnails -->
+            <div class="recent-analysis-panel">
+              <div class="card-header-bar">
+                <span class="card-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 14 14"></polyline>
+                  </svg>
+                  Recent Satellite Passes
+                </span>
+                <span style="font-size: 0.72rem; color: var(--radar-cyan); font-family: var(--font-mono); font-weight:600;">LIVE SYNC</span>
+              </div>
+
+              <!-- Populated dynamically with image thumbnails by app.js -->
+              <div id="recent-analysis-feed" class="analysis-list"></div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================================================================
+             VIEW 2: SATELLITE ANALYSIS
+             ================================================================ -->
+        <section id="view-satellite-analysis" class="app-view">
+          <div class="satellite-analysis-container">
+            
+            <!-- Upload Area & Presets Panel -->
+            <div class="analysis-upload-panel">
+              <div class="upload-flow-grid">
+                
+                <!-- Drag and Drop Target -->
+                <div id="image-drop-zone" class="drop-zone">
+                  <input type="file" id="satellite-file-input" class="file-input-hidden" accept="image/*">
+                  <div class="drop-zone-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                  </div>
+                  <div id="drop-zone-text" class="drop-zone-text">Drop Satellite Image Here, or Click to Browse</div>
+                  <div class="drop-zone-sub">Supports GeoTIFF, PNG, JPEG, WebP (SAR C/X-Band, Sentinel-1/2, Optical)</div>
+                </div>
+
+                <!-- Preset High-Res Satellite Acquisitions for Quick Testing -->
+                <div class="preset-selector-box">
+                  <div class="preset-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    Or Choose Real-World Satellite Acquisition:
+                  </div>
+
+                  <div class="preset-buttons-group">
+                    <button class="preset-btn active" data-preset-id="preset-sar-1">
+                      <div>
+                        <div class="preset-name">Sentinel-1C SAR (VV-Pol)</div>
+                        <div style="font-size:0.7rem; color:var(--text-secondary);">Strait of Dover TSS • 10m Ground Resolution</div>
+                      </div>
+                      <span class="preset-type">SAR RADAR</span>
+                    </button>
+
+                    <button class="preset-btn" data-preset-id="preset-optical-2">
+                      <div>
+                        <div class="preset-name">Sentinel-2 Optical Multi-spectral</div>
+                        <div style="font-size:0.7rem; color:var(--text-secondary);">Persian Gulf Tanker Fairway • SWIR B11 Composite</div>
+                      </div>
+                      <span class="preset-type">OPTICAL</span>
+                    </button>
+
+                    <button class="preset-btn" data-preset-id="preset-sar-3">
+                      <div>
+                        <div class="preset-name">TerraSAR-X High-Res ScanSAR</div>
+                        <div style="font-size:0.7rem; color:var(--text-secondary);">Singapore Anchorage • 8.2m Pixel Spacing</div>
+                      </div>
+                      <span class="preset-type">X-BAND SAR</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Action Bar -->
+              <div class="analyze-btn-container">
+                <button id="btn-analyze-image" class="btn-primary-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  Analyze Image
+                </button>
+
+                <div id="analysis-status-pill" class="header-status-badge">
+                  Satellite Image Ready for CV Segmentation
+                </div>
+
+                <div style="margin-left: auto; display: flex; gap: 8px;">
+                  <button id="btn-view-side-by-side" class="map-control-btn active">Side-by-Side View</button>
+                  <button id="btn-view-slider" class="map-control-btn">Interactive Split Slider</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visualization: Original vs Analyzed Image -->
+            <!-- 1. Side-by-Side Mode -->
+            <div id="side-by-side-display" class="satellite-display-grid">
+              
+              <!-- Original Satellite Image Card -->
+              <div class="image-card">
+                <div class="image-card-header">
+                  <span class="card-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Original Satellite Image
+                  </span>
+                  <span class="image-tag-badge original">Raw Satellite Acquisition</span>
+                </div>
+                <div class="image-viewport-wrapper">
+                  <canvas id="original-image-canvas" class="viewport-canvas"></canvas>
+                </div>
+                <div style="padding: 10px 16px; font-size: 0.73rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                  <span>Raw SAR backscatter / optical reflectance</span>
+                  <span style="font-family: var(--font-mono);">Band: C-Band VV | Resolution: 10m/px</span>
+                </div>
+              </div>
+
+              <!-- Analyzed Image with Highlighted Spill Region -->
+              <div class="image-card">
+                <div class="image-card-header">
+                  <span class="card-title" style="color: var(--radar-cyan);">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Analyzed Image: Potential Oil-Spill Region Highlighted
+                  </span>
+                  <span class="image-tag-badge analyzed">CV Detected Anomaly</span>
+                </div>
+                <div class="image-viewport-wrapper">
+                  <canvas id="analyzed-image-canvas" class="viewport-canvas"></canvas>
+                </div>
+                <div style="padding: 8px 16px; background: rgba(5,10,20,0.6); display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary);">
+                  <div style="display: flex; gap: 12px; align-items: center;">
+                    <span>Overlays:</span>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                      <input type="checkbox" id="chk-overlay-mask" checked> Spill Mask
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                      <input type="checkbox" id="chk-overlay-contour" checked> Boundary
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                      <input type="checkbox" id="chk-overlay-centroid" checked> Centroid
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                      <input type="checkbox" id="chk-overlay-bbox" checked> Dimensions
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px; color: var(--radar-cyan);">
+                      <input type="checkbox" id="chk-overlay-vessels" checked> Vessel Targets (CV)
+                    </label>
+                  </div>
+                  <span style="color: var(--spill-critical); font-family: var(--font-mono); font-weight: 600;">Confidence: 94.6%</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 2. Interactive Split Slider Mode -->
+            <div id="slider-display" class="comparison-container" style="display: none;">
+              <!-- Original Layer (Background) -->
+              <div class="comparison-image-layer">
+                <canvas id="comp-original-canvas"></canvas>
+              </div>
+
+              <!-- Analyzed Layer (Clipped Foreground) -->
+              <div id="comparison-analyzed-layer" class="comparison-image-layer analyzed-layer">
+                <canvas id="comp-analyzed-canvas"></canvas>
+              </div>
+
+              <!-- Draggable Handle -->
+              <div id="comparison-slider-handle" class="comparison-slider-handle">
+                <div class="slider-knob">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                    <polyline points="9 18 3 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scientific Spill Metrics Panel -->
+            <div class="metrics-dashboard-grid">
+              
+              <!-- 1. Spill Location -->
+              <div class="metric-box">
+                <div class="metric-label">Spill Centroid Location</div>
+                <div id="metric-location" class="metric-value" style="font-size: 1.15rem;">51° 13' 06" N, 001° 37' 26" E</div>
+                <div class="metric-sub">English Channel • Dover Traffic Separation Scheme</div>
+              </div>
+
+              <!-- 2. Estimated Affected Area -->
+              <div class="metric-box">
+                <div class="metric-label">Estimated Affected Area</div>
+                <div id="metric-area" class="metric-value critical">14.28 km²</div>
+                <div class="metric-sub">Equivalent to 1,428 hectares (Calculated via 10m GSD pixel count)</div>
+              </div>
+
+              <!-- 3. Detection Confidence -->
+              <div class="metric-box">
+                <div class="metric-label">Detection Confidence</div>
+                <div id="metric-confidence" class="metric-value cyan">94.6%</div>
+                <div class="metric-sub">Based on dark-formation edge gradient & SAR clutter model</div>
+              </div>
+
+              <!-- 4. Uncertainty Margin -->
+              <div class="metric-box">
+                <div class="metric-label">Uncertainty Margin</div>
+                <div id="metric-uncertainty" class="metric-value">± 6.0% (0.85 km²)</div>
+                <div class="metric-sub">Speckle noise index & sea surface wave variance</div>
+              </div>
+
+            </div>
+
+            <!-- Spill Forensics & AIS Transition Action -->
+            <div class="spill-forensics-banner">
+              <div class="forensics-info">
+                <div class="forensics-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  Potential Oil Spill Detected — Ready for AIS Correlation
+                </div>
+                <div class="forensics-desc">
+                  Sensor: <span id="metric-sensor" style="color: #fff; font-family: var(--font-mono);">Sentinel-1C C-Band SAR</span> | 
+                  Attenuation: <span id="metric-backscatter" style="color: #fff; font-family: var(--font-mono);">-4.82 dB damping</span> |
+                  Estimated release time window: <span style="color: #fff; font-family: var(--font-mono);">3.5 to 5 hours prior to satellite acquisition</span>
+                </div>
+              </div>
+
+              <button onclick="window.OilTraceApp.navigateTo('vessel-ranking');" class="btn-primary-action" style="padding: 12px 24px;">
+                <span>Correlate with AIS Vessel Data & Rank Vessels</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================================================================
+             VIEW 3: VESSEL RANKING
+             ================================================================ -->
+        <section id="view-vessel-ranking" class="app-view">
+          <div class="ranking-view-container">
+            
+            <!-- Spill Correlation Context Banner -->
+            <div class="ranking-spill-banner">
+              <div class="spill-context-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2">
+                  <path d="M12 2L19 19L12 16L5 19L12 2Z"></path>
+                </svg>
+                <span>Correlating Potential Spill:</span>
+                <span class="spill-id-pill">PS-2026-0927-A (14.28 km²)</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal;">• Strait of Dover TSS</span>
+              </div>
+
+              <div class="correlation-weights-pill">
+                <span class="weight-factor"><span class="weight-dot"></span>Distance (25%)</span>
+                <span class="weight-factor"><span class="weight-dot"></span>Time Proximity (25%)</span>
+                <span class="weight-factor"><span class="weight-dot"></span>Route Similarity (20%)</span>
+                <span class="weight-factor"><span class="weight-dot"></span>Speed (15%)</span>
+                <span class="weight-factor"><span class="weight-dot"></span>Heading (15%)</span>
+              </div>
+            </div>
+
+            <!-- Toolbar: Filters and Sorters -->
+            <div class="ranking-toolbar">
+              <div class="ranking-filter-group">
+                <span style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Filter:</span>
+                <button class="ranking-filter-btn table-filter-btn active" data-filter="all">All Candidates (5)</button>
+                <button class="ranking-filter-btn table-filter-btn" data-filter="tankers">Tankers Only</button>
+                <button class="ranking-filter-btn table-filter-btn" data-filter="cargo">Cargo & Bulk</button>
+                <button class="ranking-filter-btn table-filter-btn" data-filter="high-risk">High Correlation (>70%)</button>
+              </div>
+
+              <div class="sort-select-wrapper">
+                <label for="ranking-sort-select">Sort by:</label>
+                <select id="ranking-sort-select">
+                  <option value="score-desc">Correlation Score (Highest First)</option>
+                  <option value="distance-asc">Distance to Spill (Closest First)</option>
+                  <option value="time-asc">Time Proximity (Closest First)</option>
+                  <option value="trajectory-desc">Route Similarity (Best Match)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Candidate Vessel Table -->
+            <div class="vessel-table-card">
+              <div class="vessel-table-responsive">
+                <table class="vessel-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">Rank</th>
+                      <th>Candidate Vessel</th>
+                      <th>Type & Route</th>
+                      <th>Correlation Score</th>
+                      <th>Distance (to Spill)</th>
+                      <th>Time Proximity</th>
+                      <th>Speed & Heading</th>
+                      <th style="text-align: right;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vessel-ranking-tbody">
+                    <!-- Populated dynamically by ranking.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Operational Methodology Note -->
+            <div class="operational-disclaimer">
+              <strong>Operational Assessment Methodology:</strong> Candidate vessels are ranked algorithmically using spatial-temporal proximity of Class-A/B AIS broadcast messages relative to the satellite detection window and estimated slick trajectory. Results are formulated as "Candidate Vessels" with probabilistic correlation scores for investigative prioritisation.
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================================================================
+             VIEW 4: ALERTS
+             ================================================================ -->
+        <section id="view-alerts" class="app-view">
+          <div class="alerts-view-container">
+            
+            <!-- Alerts Toolbar -->
+            <div class="alerts-header-bar">
+              <div class="alerts-category-tabs">
+                <button class="alert-tab-btn active" data-category="all">
+                  <span>All Maritime Alerts</span>
+                  <span class="nav-badge count-pill">6</span>
+                </button>
+                <button class="alert-tab-btn" data-category="spill">
+                  <span>Potential Oil Spills</span>
+                  <span class="nav-badge count-pill" style="color:var(--spill-critical);">2</span>
+                </button>
+                <button class="alert-tab-btn" data-category="vessel">
+                  <span>Candidate Vessels</span>
+                  <span class="nav-badge count-pill" style="color:var(--warning-amber);">2</span>
+                </button>
+                <button class="alert-tab-btn" data-category="ais">
+                  <span>AIS Data Issues</span>
+                  <span class="nav-badge count-pill" style="color:var(--radar-cyan);">2</span>
+                </button>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="alerts-search-box">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="alert-search-input" placeholder="Search alerts, vessels, MMSI...">
+                </div>
+
+                <div class="sort-select-wrapper">
+                  <label for="alert-severity-filter">Severity:</label>
+                  <select id="alert-severity-filter">
+                    <option value="all">All Severities</option>
+                    <option value="critical">Critical Only</option>
+                    <option value="warning">Warning Only</option>
+                    <option value="advisory">Advisory Only</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feed of Alert Cards -->
+            <div id="alerts-feed-container" class="alerts-feed-grid">
+              <!-- Populated dynamically by alerts.js -->
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         EVIDENCE DETAILS MODAL (Candidate Vessel Forensics)
+         ==================================================================== -->
+    <div id="evidence-modal-backdrop" class="modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div id="modal-vessel-title" class="modal-title">MT BOREALIS STAR [Candidate #1]</div>
+            <div id="modal-vessel-sub" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">
+              Crude Oil Tanker • Flag: Liberia • IMO: 9481234 • MMSI: 244710923
+            </div>
+          </div>
+          <button id="btn-close-evidence-modal" class="modal-close-btn" title="Close Dossier">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          
+          <!-- Key Metrics Grid -->
+          <div class="evidence-metrics-grid">
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Composite Correlation</div>
+              <div id="modal-correlation-score" class="evidence-metric-value" style="color: var(--spill-critical);">93.8% Match</div>
+            </div>
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Closest Point of Approach (CPA)</div>
+              <div id="modal-metric-cpa" class="evidence-metric-value">0.22 nm</div>
+            </div>
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Time Proximity at CPA</div>
+              <div id="modal-metric-time" class="evidence-metric-value">-38 min</div>
+            </div>
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Trajectory Alignment</div>
+              <div id="modal-metric-route" class="evidence-metric-value">95.4% Align</div>
+            </div>
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Speed at Spill Radius</div>
+              <div id="modal-metric-speed" class="evidence-metric-value">8.2 kts</div>
+            </div>
+            <div class="evidence-metric-box">
+              <div class="evidence-metric-name">Reported Cargo Status</div>
+              <div id="modal-metric-cargo" class="evidence-metric-value" style="font-size:0.95rem;">Laden (Crude Oil)</div>
+            </div>
+          </div>
+
+          <!-- 5 Parameter Correlation Bar Breakdown -->
+          <div class="correlation-factors-list">
+            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); margin-bottom: 4px;">
+              Correlation Parameters Breakdown
+            </div>
+
+            <!-- 1. Distance -->
+            <div class="factor-item">
+              <div class="factor-header">
+                <span>1. Spatial Distance to Spill Centroid</span>
+                <span id="bar-distance-val" style="font-family: var(--font-mono); color: var(--radar-cyan);">96%</span>
+              </div>
+              <div class="factor-bar">
+                <div id="bar-distance" class="factor-bar-fill" style="width: 96%;"></div>
+              </div>
+              <div id="bar-distance-desc" class="factor-desc">0.78 nm closest approach to slick perimeter</div>
+            </div>
+
+            <!-- 2. Time Proximity -->
+            <div class="factor-item">
+              <div class="factor-header">
+                <span>2. Time Proximity (Release Window Delta)</span>
+                <span id="bar-time-val" style="font-family: var(--font-mono); color: var(--radar-cyan);">94%</span>
+              </div>
+              <div class="factor-bar">
+                <div id="bar-time" class="factor-bar-fill" style="width: 94%;"></div>
+              </div>
+              <div id="bar-time-desc" class="factor-desc">-38 min relative to estimated discharge window</div>
+            </div>
+
+            <!-- 3. Route / Trajectory Similarity -->
+            <div class="factor-item">
+              <div class="factor-header">
+                <span>3. Route / Trajectory Alignment with Slick Axis</span>
+                <span id="bar-trajectory-val" style="font-family: var(--font-mono); color: var(--radar-cyan);">95%</span>
+              </div>
+              <div class="factor-bar">
+                <div id="bar-trajectory" class="factor-bar-fill" style="width: 95%;"></div>
+              </div>
+              <div id="bar-trajectory-desc" class="factor-desc">95.4% colinear with slick longitudinal dispersion vector (058°)</div>
+            </div>
+
+            <!-- 4. Speed Anomaly -->
+            <div class="factor-item">
+              <div class="factor-header">
+                <span>4. Speed Anomaly Assessment</span>
+                <span id="bar-speed-val" style="font-family: var(--font-mono); color: var(--radar-cyan);">92%</span>
+              </div>
+              <div class="factor-bar">
+                <div id="bar-speed" class="factor-bar-fill" style="width: 92%;"></div>
+              </div>
+              <div id="bar-speed-desc" class="factor-desc">Speed dropped from 14.1 kts to 8.2 kts for 46 mins inside slick perimeter</div>
+            </div>
+
+            <!-- 5. Heading Correlation -->
+            <div class="factor-item">
+              <div class="factor-header">
+                <span>5. Heading Alignment</span>
+                <span id="bar-heading-val" style="font-family: var(--font-mono); color: var(--radar-cyan);">92%</span>
+              </div>
+              <div class="factor-bar">
+                <div id="bar-heading" class="factor-bar-fill" style="width: 92%;"></div>
+              </div>
+              <div id="bar-heading-desc" class="factor-desc">Heading 059° aligned within 1.8° of slick drift axis</div>
+            </div>
+          </div>
+
+          <!-- Forensics Evidence Notes -->
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; font-size: 0.78rem; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-weight: 700; color: #fff; text-transform: uppercase; font-size: 0.72rem;">Forensic Correlation Observations</div>
+            <div><strong>Wake & Radar Signature:</strong> <span id="modal-wake-note" style="color: var(--text-secondary);">SAR backscatter attenuation directly correlates with vessel wake axis.</span></div>
+            <div><strong>AIS Signal Integrity:</strong> <span id="modal-ais-continuity" style="color: var(--text-secondary);">Class-A transponder broadcast maintained continuously.</span></div>
+            <div><strong>Route Alterations:</strong> <span id="modal-anomaly-note" style="color: var(--text-secondary);">Vessel made two course deviations during the speed drop window.</span></div>
+          </div>
+
+          <!-- Legal / Operational Integrity Disclaimer -->
+          <div class="operational-disclaimer">
+            <strong>Operational Advisory:</strong> Rankings and correlation scores represent algorithmic spatial-temporal correlation with AIS positional reports. All vessels are designated as "Candidate Vessels" pending physical validation and sampling by maritime regulatory authorities.
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+            <button onclick="window.OilTraceRanking.closeModal();" class="btn-secondary">Close Dossier</button>
+            <button id="modal-btn-view-map" class="btn-primary-action">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+              </svg>
+              Inspect Trajectory on Marine Map
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leaflet.js Cartography Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/analyzer.js"></script>
+  <script src="js/ranking.js"></script>
+  <script src="js/alerts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
